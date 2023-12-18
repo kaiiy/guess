@@ -13,7 +13,11 @@ const main = () => {
     // playCommand
     .command("play <input...:string[]>", "Play the game")
     .action(async (_, input) => {
-      await play(input.join(" "));
+      let _input = input;
+      if (input === undefined) {
+        _input = [];
+      }
+      await play(_input.join(" "));
     })
     .parse(Deno.args);
 };

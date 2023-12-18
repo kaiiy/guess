@@ -24,7 +24,8 @@ const play = async (input: string) => {
   }
 
   if (input.length === 0) {
-    throw new Error("Input is not found");
+    console.log("Input something (e.g. `guess play hello`)");
+    return;
   }
   if (input === target) {
     console.log("Score:", 1);
