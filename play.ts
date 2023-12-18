@@ -3,7 +3,7 @@ import { cacheSchema } from "./cache.ts";
 import { config } from "./config.ts";
 
 const play = async (input: string) => {
-  const kv = await Deno.openKv(config.db);
+  const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
 
   const openai = new OpenAI({
     apiKey: Deno.env.get("OPENAI_API_KEY"),

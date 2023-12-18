@@ -3,8 +3,8 @@ import { OpenAI } from "./deps.ts";
 import { config } from "./config.ts";
 
 const init = async () => {
-  await Deno.mkdir("./db", { recursive: true });
-  const kv = await Deno.openKv("./db/cache.db");
+  await Deno.mkdir(config.db.dir, { recursive: true });
+  const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
 
   const openai = new OpenAI({
     apiKey: Deno.env.get("OPENAI_API_KEY"),

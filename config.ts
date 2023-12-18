@@ -1,5 +1,8 @@
 const config = {
-  db: "./db/cache.db",
+  db: {
+    dir: `${Deno.env.get("HOME")}/.local/share/kaiiy/guess`,
+    file: "cache.db",
+  },
   targets: [
     "おはよう",
   ],
