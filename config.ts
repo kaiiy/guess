@@ -1,5 +1,6 @@
 const config = {
   db: {
+    table: "cache",
     dir: `${Deno.env.get("HOME")}/.local/share/kaiiy/guess`,
     file: "cache.db",
   },

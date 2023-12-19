@@ -18,7 +18,7 @@ const initDb = async () => {
   const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
 
   // load cache
-  const buffer = await kv.get(["cache"]);
+  const buffer = await kv.get([config.db.table]);
 
   // fetch embeddings (if not cached)
   if (!isCached(buffer)) {
@@ -39,7 +39,7 @@ const initDb = async () => {
       };
     });
 
-    await kv.set(["cache"], entries);
+    await kv.set([config.db.table], entries);
   }
 };
 export { initDb };
