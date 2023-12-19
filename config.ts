@@ -8,7 +8,7 @@ const config = {
   },
   targets,
   model: {
-    chat: "gpt-3.5-turbo",
+    chat: "gpt-4-1106-preview",
     embedding: "text-embedding-ada-002",
   },
 };
