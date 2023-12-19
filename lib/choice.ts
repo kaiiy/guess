@@ -1,4 +1,5 @@
 import { OpenAI, z } from "../deps.ts";
+import { config } from "../config.ts";
 
 const answerSchema = z.union([
   z.literal("yes"),
@@ -18,7 +19,7 @@ const choiceYesNo = async (
   });
 
   const res = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: config.model.chat,
     messages: [{ role: "user", content: `「${target}」は${question}` }],
     n: 1,
     tools: [
@@ -50,6 +51,7 @@ const choiceYesNo = async (
   try {
     const arg = JSON.parse(toolCalls[0].function.arguments);
     const answer = arg.answer;
+
     if (typeof answer !== "number") {
       return "unknown";
     }

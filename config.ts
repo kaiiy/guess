@@ -7,7 +7,10 @@ const config = {
     file: "cache.db",
   },
   targets,
-  model: "text-embedding-ada-002",
+  model: {
+    chat: "gpt-4-1106-preview",
+    embedding: "text-embedding-ada-002",
+  },
 };
 
 export { config };

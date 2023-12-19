@@ -21,7 +21,6 @@ const calcSimilarity = (vec1: number[], vec2: number[]) => {
 };
 
 const calcScore = (cosSim: number) => {
-  console.log("cosSim:", cosSim);
   if (cosSim < 0.7) {
     return 0;
   }

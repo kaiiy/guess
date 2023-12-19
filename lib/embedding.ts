@@ -19,7 +19,7 @@ const fetchEmbedding = async (key: string) => {
 
   const chatCompletion = await openai.embeddings.create({
     input: [key],
-    model: config.model,
+    model: config.model.embedding,
   });
 
   return chatCompletion.data[0].embedding;
@@ -43,7 +43,7 @@ const fetchEmbeddings = async (keys: string[]) => {
 
   const chatCompletion = await openai.embeddings.create({
     input: keys,
-    model: config.model,
+    model: config.model.embedding,
   });
 
   return chatCompletion.data.map((data) => data.embedding);
