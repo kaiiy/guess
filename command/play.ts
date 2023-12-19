@@ -1,6 +1,7 @@
-import { green, OpenAI } from "../deps.ts";
+import { green } from "../deps.ts";
 import { cacheSchema } from "../lib/cache.ts";
 import { config } from "../config.ts";
+import { getEmbedding } from "../lib/embedding.ts";
 
 const calcSimilarity = (vec1: number[], vec2: number[]) => {
   if (vec1.length !== vec2.length) {
@@ -31,40 +32,25 @@ const calcScore = (cosSim: number) => {
 const play = async (input: string) => {
   const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
 
-  const openai = new OpenAI({
-    apiKey: Deno.env.get("OPENAI_API_KEY"),
-  });
-
-  const target = config.targets[0];
-
   const buffer = (await kv.get([config.db.table])).value;
   const bufferResult = cacheSchema.safeParse(buffer);
   if (!bufferResult.success) {
     throw new Error("Cache is not valid");
   }
   const cache = bufferResult.data;
-  const targetEmbedding = cache.find((entry) => entry.key === target)
-    ?.embedding;
-  if (targetEmbedding === undefined) {
-    throw new Error("Target embedding is not found");
-  }
 
-  if (input.length === 0) {
-    console.log("Input something");
-    return;
-  }
+  // get target embedding
+  const target = config.targets[0];
+  const targetEmbedding = await getEmbedding(target, cache);
+
   if (input === target) {
     console.log("Score:", 1);
     console.log(green("Game Clear!"));
     Deno.exit(0);
   }
 
-  const chatCompletion = await openai.embeddings.create({
-    input,
-    model: config.model,
-  });
+  const inputEmbedding = await getEmbedding(input, cache);
 
-  const inputEmbedding = chatCompletion.data[0].embedding;
   const similarity = calcSimilarity(inputEmbedding, targetEmbedding);
   if (similarity === undefined) {
     throw new Error("Failed to calc similarity");
