@@ -8,7 +8,7 @@ import { getEmbedding } from "./lib/embedding.ts";
 const main = () => {
   new Command()
     .name("guess")
-    .version("0.0.5")
+    .version("0.1.0")
     .description("Guess the target word")
     // default command
     .action(async () => {

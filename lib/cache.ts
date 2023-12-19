@@ -1,4 +1,4 @@
-import * as z from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { z } from "../deps.ts";
 
 const cacheEntrySchema = z.object({
   key: z.string(),

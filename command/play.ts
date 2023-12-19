@@ -2,6 +2,7 @@ import { green } from "../deps.ts";
 import { CacheEntry, cacheSchema } from "../lib/cache.ts";
 import { config } from "../config.ts";
 import { getEmbedding } from "../lib/embedding.ts";
+import { choiceYesNo } from "../lib/choice.ts";
 
 const calcSimilarity = (vec1: number[], vec2: number[]) => {
   if (vec1.length !== vec2.length) {
@@ -20,13 +21,20 @@ const calcSimilarity = (vec1: number[], vec2: number[]) => {
 };
 
 const calcScore = (cosSim: number) => {
-  // let base = cosSim;
-  // if (cosSim < 0) {
-  //   base = 0;
-  // }
-  // const a = 10;
-  // return (a ** base - 1) / (a - 1);
-  return cosSim;
+  console.log("cosSim:", cosSim);
+  if (cosSim < 0.7) {
+    return 0;
+  }
+  if (cosSim > 0.9) {
+    return 1;
+  }
+
+  const value = (cosSim - 0.7) / (0.9 - 0.7);
+  return 1 / 2 * Math.sin(Math.PI * (value - 1 / 2)) + 1 / 2;
+};
+
+const isQuestion = (input: string) => {
+  return input.endsWith("?") || input.endsWith("？");
 };
 
 const play = async (target: CacheEntry, input: string) => {
@@ -40,19 +48,28 @@ const play = async (target: CacheEntry, input: string) => {
   const cache = bufferResult.data;
 
   if (input === target.key) {
-    console.log("Score:", 1);
+    console.log("Answer:", "yes");
+    console.log("Similarity:", 1);
     console.log(green("Game Clear!"));
     Deno.exit(0);
   }
 
-  const inputEmbedding = await getEmbedding(input, cache);
+  // question
+  if (isQuestion(input)) {
+    const answer = await choiceYesNo(target.key, input);
+    console.log("Answer:", answer);
+    return;
+  }
 
+  // maybe word
+  const inputEmbedding = await getEmbedding(input, cache);
   const similarity = calcSimilarity(inputEmbedding, target.embedding);
   if (similarity === undefined) {
     throw new Error("Failed to calc similarity");
   }
   const score = calcScore(similarity);
-  console.log("Score:", score);
+
+  console.log("Similarity:", Math.round(score * 1000) / 1000);
 };
 
 export { play };
