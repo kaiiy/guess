@@ -1,7 +1,7 @@
 import { Cache } from "../lib/cache.ts";
 import { config } from "../config.ts";
 import { cacheSchema, isEntryCached } from "../lib/cache.ts";
-import { getEmbedding } from "../lib/embedding.ts";
+import { fetchEmbeddings } from "../lib/embedding.ts";
 
 const isCached = (maybeCache: Deno.KvEntryMaybe<unknown>): boolean => {
   const _cache = cacheSchema.safeParse(maybeCache.value);
@@ -22,13 +22,13 @@ const initDb = async () => {
 
   // fetch embeddings if not cached
   if (!isCached(buffer)) {
-    const entries: Cache = await Promise.all(
-      config.targets.map(async (target) => {
+    const entries: Cache = (await fetchEmbeddings(["dummy"])).map(
+      (embedding, i) => {
         return {
-          key: target,
-          embedding: await getEmbedding(target, undefined),
+          key: config.targets[i],
+          embedding,
         };
-      }),
+      },
     );
     await kv.set([config.db.table], entries);
   }

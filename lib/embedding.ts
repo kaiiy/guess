@@ -36,4 +36,17 @@ const getEmbedding = (key: string, cache: Cache | undefined) => {
   return fetchEmbedding(key);
 };
 
-export { getEmbedding };
+const fetchEmbeddings = async (keys: string[]) => {
+  const openai = new OpenAI({
+    apiKey: Deno.env.get("OPENAI_API_KEY"),
+  });
+
+  const chatCompletion = await openai.embeddings.create({
+    input: keys,
+    model: config.model,
+  });
+
+  return chatCompletion.data.map((data) => data.embedding);
+};
+
+export { fetchEmbeddings, getEmbedding };

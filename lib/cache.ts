@@ -20,4 +20,4 @@ const isEntryCached = (cache: Cache, key: string): boolean => {
   return cache.find((entry) => entry.key === key) !== undefined;
 };
 
-export { addEntry, type Cache, cacheSchema, isEntryCached };
+export { addEntry, type Cache, type CacheEntry, cacheSchema, isEntryCached };

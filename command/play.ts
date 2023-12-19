@@ -1,5 +1,5 @@
 import { green } from "../deps.ts";
-import { cacheSchema } from "../lib/cache.ts";
+import { CacheEntry, cacheSchema } from "../lib/cache.ts";
 import { config } from "../config.ts";
 import { getEmbedding } from "../lib/embedding.ts";
 
@@ -29,7 +29,7 @@ const calcScore = (cosSim: number) => {
   return cosSim;
 };
 
-const play = async (input: string) => {
+const play = async (target: CacheEntry, input: string) => {
   const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
 
   const buffer = (await kv.get([config.db.table])).value;
@@ -39,11 +39,7 @@ const play = async (input: string) => {
   }
   const cache = bufferResult.data;
 
-  // get target embedding
-  const target = config.targets[0];
-  const targetEmbedding = await getEmbedding(target, cache);
-
-  if (input === target) {
+  if (input === target.key) {
     console.log("Score:", 1);
     console.log(green("Game Clear!"));
     Deno.exit(0);
@@ -51,7 +47,7 @@ const play = async (input: string) => {
 
   const inputEmbedding = await getEmbedding(input, cache);
 
-  const similarity = calcSimilarity(inputEmbedding, targetEmbedding);
+  const similarity = calcSimilarity(inputEmbedding, target.embedding);
   if (similarity === undefined) {
     throw new Error("Failed to calc similarity");
   }
