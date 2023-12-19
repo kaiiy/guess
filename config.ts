@@ -6,6 +6,7 @@ const config = {
   targets: [
     "おはよう",
   ],
+  model: "text-embedding-ada-002",
 };
 
 export { config };

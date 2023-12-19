@@ -16,4 +16,8 @@ const addEntry = (cache: Cache, entry: CacheEntry): Cache => {
   return cache;
 };
 
-export { addEntry, type Cache, cacheSchema };
+const isEntryCached = (cache: Cache, key: string): boolean => {
+  return cache.find((entry) => entry.key === key) !== undefined;
+};
+
+export { addEntry, type Cache, cacheSchema, isEntryCached };

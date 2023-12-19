@@ -1,6 +1,6 @@
-import { green, OpenAI, similarity } from "./deps.ts";
-import { cacheSchema } from "./cache.ts";
-import { config } from "./config.ts";
+import { green, OpenAI, similarity } from "../deps.ts";
+import { cacheSchema } from "../cache.ts";
+import { config } from "../config.ts";
 
 const play = async (input: string) => {
   const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
@@ -35,7 +35,7 @@ const play = async (input: string) => {
 
   const chatCompletion = await openai.embeddings.create({
     input,
-    model: "text-embedding-ada-002",
+    model: config.model,
   });
 
   const inputEmbedding = chatCompletion.data[0].embedding;
