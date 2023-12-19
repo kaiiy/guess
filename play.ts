@@ -1,4 +1,4 @@
-import { OpenAI, similarity } from "./deps.ts";
+import { green, OpenAI, similarity } from "./deps.ts";
 import { cacheSchema } from "./cache.ts";
 import { config } from "./config.ts";
 
@@ -24,13 +24,13 @@ const play = async (input: string) => {
   }
 
   if (input.length === 0) {
-    console.log("Input something (e.g. `guess play hello`)");
+    console.log("Input something");
     return;
   }
   if (input === target) {
     console.log("Score:", 1);
-    console.log("Game clear!");
-    return;
+    console.log(green("Game Clear!"));
+    Deno.exit(0);
   }
 
   const chatCompletion = await openai.embeddings.create({
