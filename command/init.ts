@@ -1,7 +1,7 @@
-import { Cache } from "../cache.ts";
+import { Cache } from "../lib/cache.ts";
 import { OpenAI } from "../deps.ts";
 import { config } from "../config.ts";
-import { cacheSchema, isEntryCached } from "../cache.ts";
+import { cacheSchema, isEntryCached } from "../lib/cache.ts";
 
 const isCached = (maybeCache: Deno.KvEntryMaybe<unknown>): boolean => {
   const _cache = cacheSchema.safeParse(maybeCache.value);

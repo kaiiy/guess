@@ -1,5 +1,5 @@
 import { green, OpenAI, similarity } from "../deps.ts";
-import { cacheSchema } from "../cache.ts";
+import { cacheSchema } from "../lib/cache.ts";
 import { config } from "../config.ts";
 
 const play = async (input: string) => {
