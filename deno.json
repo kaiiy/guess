@@ -1,12 +1,6 @@
 {
   "tasks": {
-    "cli": "deno run --allow-read --allow-write --allow-env --allow-net --unstable ./cli.ts",
+    "cli": "deno run --allow-env --allow-net ./cli.ts",
     "lock": "deno cache --lock=deno.lock --lock-write deps.ts"
-  },
-  "compilerOptions": {
-    "lib": [
-      "deno.unstable",
-      "dom"
-    ]
   }
 }

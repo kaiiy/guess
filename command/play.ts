@@ -1,7 +1,6 @@
 import { green } from "../deps.ts";
-import { CacheEntry, cacheSchema } from "../lib/cache.ts";
-import { config } from "../config.ts";
-import { getEmbedding } from "../lib/embedding.ts";
+import { CacheEntry } from "../lib/cache.ts";
+import { fetchEmbedding } from "../lib/embedding.ts";
 import { choiceYesNo } from "../lib/choice.ts";
 
 const calcSimilarity = (vec1: number[], vec2: number[]) => {
@@ -37,15 +36,6 @@ const isQuestion = (input: string) => {
 };
 
 const play = async (target: CacheEntry, input: string) => {
-  const kv = await Deno.openKv(`${config.db.dir}/${config.db.file}`);
-
-  const buffer = (await kv.get([config.db.table])).value;
-  const bufferResult = cacheSchema.safeParse(buffer);
-  if (!bufferResult.success) {
-    throw new Error("Cache is not valid");
-  }
-  const cache = bufferResult.data;
-
   if (input === target.key) {
     console.log("Answer:", "yes");
     console.log("Similarity:", 1);
@@ -61,7 +51,7 @@ const play = async (target: CacheEntry, input: string) => {
   }
 
   // maybe word
-  const inputEmbedding = await getEmbedding(input, cache);
+  const inputEmbedding = await fetchEmbedding(input);
   const similarity = calcSimilarity(inputEmbedding, target.embedding);
   if (similarity === undefined) {
     throw new Error("Failed to calc similarity");

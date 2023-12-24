@@ -1,28 +1,24 @@
 import { Command, green } from "./deps.ts";
 import { play } from "./command/play.ts";
-import { initDb } from "./command/init.ts";
-import { resetCache } from "./command/reset.ts";
 import { config } from "./config.ts";
-import { getEmbedding } from "./lib/embedding.ts";
+import { fetchEmbedding } from "./lib/embedding.ts";
 
 const main = () => {
   new Command()
     .name("guess")
-    .version("0.1.1")
+    .version("0.1.2")
     .description("Guess the target word")
     // default command
     .action(async () => {
-      // init
-      await initDb();
-
+      // select target
       const targetKey =
         config.targets[Math.floor(Math.random() * config.targets.length)];
       const target = {
         key: targetKey,
-        embedding: await getEmbedding(targetKey, undefined),
+        embedding: await fetchEmbedding(targetKey),
       };
 
-      // play
+      // command: play
       while (true) {
         const input = prompt(green(">"));
         if (input === null) {
@@ -34,11 +30,6 @@ const main = () => {
         }
         await play(target, input.trim());
       }
-    })
-    // reset command
-    .command("reset", "Reset cache.")
-    .action(async () => {
-      await resetCache();
     })
     .parse();
 };

@@ -20,7 +20,11 @@ const choiceYesNo = async (
 
   const res = await openai.chat.completions.create({
     model: config.model.chat,
-    messages: [{ role: "user", content: `「${target}」は${question}` }],
+    messages: [{
+      role: "user",
+      content:
+        `以下の質問に対する答えがどれだけ正しいかを、1 (完全に誤り) から5 (完全に正しい) の5段階で評価してください: "「${target}」は${question}"`,
+    }],
     n: 1,
     tools: [
       {
@@ -33,8 +37,16 @@ const choiceYesNo = async (
             properties: {
               answer: {
                 type: "number",
-                description:
-                  "「1」「2」「3」「4」「5」のいずれかの数字が入る。「1」が間違い。「2」がやや間違い。「3」がどちらとも言えない。「4」がやや正しい。「5」が正しい。",
+                description: `
+                  「1」「2」「3」「4」「5」のいずれかの数字が入る。
+
+                  # 評価基準
+                  - 1: 完全に誤り
+                  - 2: おそらく誤り
+                  - 3: どちらとも言えない/分からない
+                  - 4: おそらく正しい
+                  - 5: 完全に正しい
+                  `,
               },
             },
           },
