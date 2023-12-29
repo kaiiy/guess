@@ -6,7 +6,7 @@ Guess the target word
 
 - Homebrew
 
-## セットアップ
+## Install
 
 ```bash
 # Set the OpenAI API key
