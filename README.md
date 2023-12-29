@@ -4,7 +4,7 @@ Guess the target word
 
 ## Requirements
 
-- [Deno](https://deno.land/)
+- Homebrew
 
 ## セットアップ
 
@@ -12,7 +12,7 @@ Guess the target word
 # Set the OpenAI API key
 $ export OPENAI_API_KEY=<your key here>
 # Install the command
-$ deno install -f --allow-env --allow-net -n guess https://raw.githubusercontent.com/kaiiy/guess/v0.1.2/cli.ts
+$ brew install kaiiy/tap/guess
 ```
 
 ## 遊び方
