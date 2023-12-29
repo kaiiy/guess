@@ -3,10 +3,12 @@ import { play } from "./command/play.ts";
 import { config } from "./config.ts";
 import { fetchEmbedding } from "./lib/embedding.ts";
 
+const VERSION = "0.1.3";
+
 const main = () => {
   new Command()
     .name("guess")
-    .version("0.1.2")
+    .version(VERSION)
     .description("Guess the target word")
     // default command
     .action(async () => {
