@@ -1,6 +1,6 @@
 # Guess
 
-Guess the target word
+Guess a target word.
 
 ## Requirements
 
